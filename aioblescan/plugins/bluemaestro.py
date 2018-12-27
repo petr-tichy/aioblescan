@@ -34,6 +34,7 @@ class BlueMaestro(object):
     """
 
     def __init__(self):
+        pass
 
     def decode(self,packet):
         #Look for Ruuvi tag URL and decode it
@@ -51,15 +52,12 @@ class BlueMaestro(object):
                 result["battery_level"]=val[1]
                 result["logging_interval"]=int.from_bytes(val[2:4], "big")
                 result["log_count"]=int.from_bytes(val[4:6], "big")
-                result["temperature"]=int.from_bytes(val[6:8], "big", signed=True)
-                result["humidity"]=int.from_bytes(val[8:10], "big", signed=True)
-                result["dew_point"]=int.from_bytes(val[10:12], "big", signed=True)
+                result["temperature"]=int.from_bytes(val[6:8], "big", signed=True)/10
+                result["humidity"]=int.from_bytes(val[8:10], "big", signed=True)/10
+                result["dew_point"]=int.from_bytes(val[10:12], "big", signed=True)/10
                 result["mode"]=val[12]
                 result["breach_count"]=val[13]
+                result["name"]=str(packet.retrieve("Complete Name")[0].val, 'utf-8', 'ignore')
                 return result
         else:
             return None
-        power=packet.retrieve("tx_power")
-        if power:
-            result["tx_power"]=power[-1].val
-        return None
