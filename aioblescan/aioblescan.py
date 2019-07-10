@@ -1249,27 +1249,24 @@ class BLEScanRequester(asyncio.Protocol):
     def connection_made(self, transport):
         self.transport = transport
         command=HCI_Cmd_LE_Set_Scan_Params()
-        self.transport.write(command.encode())
-
-    def connection_lost(self, exc):
-        super().connection_lost(exc)
+        self.send_command(command)
 
     def send_scan_request(self):
         '''Sending LE scan request'''
         command=HCI_Cmd_LE_Scan_Enable(True,False)
-        self.transport.write(command.encode())
+        self.send_command(command)
 
     def stop_scan_request(self):
         '''Sending LE scan request'''
         command=HCI_Cmd_LE_Scan_Enable(False,False)
-        self.transport.write(command.encode())
+        self.send_command(command)
 
-    def send_command(self,command):
+    def send_command(self, command):
         '''Sending an arbitrary command'''
         self.transport.write(command.encode())
 
     def data_received(self, packet):
         self.process(packet)
 
-    def default_process(self,data):
+    def default_process(self, data):
         pass

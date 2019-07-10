@@ -28,6 +28,9 @@ from base64 import b64decode
 from math import sqrt
 from struct import pack, unpack, calcsize
 from aioblescan.plugins import EddyStone
+
+from .generic import Device, DevicesDict, ReadingDescriptor, AttributeDescriptor, BaseDescriptor
+
 # A few convenience functions
 #
 
@@ -36,6 +39,14 @@ def get_temp(int, frac):
     if (int >> 7) & 1:
         return -(int & ~(1 << 7)) - frac/100.0
     return (int & ~(1 << 7)) + frac/100.0
+
+class RuuviDevice(Device):
+    temp = ReadingDescriptor('temperature', precision=1, signed=True, scale=-1, ttl=3)
+    humidity = ReadingDescriptor('humidity', precision=0, signed=False, scale=-1)
+    battery_level = ReadingDescriptor('battery_level', precision=0, signed=False, scale=0)
+
+    mac_address = AttributeDescriptor('mac_address')
+    name = AttributeDescriptor('name')
 
 # Ruuvi tag stuffs
 

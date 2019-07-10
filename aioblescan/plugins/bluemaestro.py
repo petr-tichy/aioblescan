@@ -47,7 +47,7 @@ class BlueMaestro(object):
             val=url[0].val
             if val[0]==0x33 and val[1]==0x01 and val[2]==0x17:
                 #Looks just right
-                result["mac address"]=packet.retrieve("peer")[0].val
+                result["mac_address"]=packet.retrieve("peer")[0].val
                 val=val[2:]
                 result["battery_level"]=val[1]
                 result["logging_interval"]=int.from_bytes(val[2:4], "big")
